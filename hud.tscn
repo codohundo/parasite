@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://c2okcv2ojj0sn"]
+
+[ext_resource type="Script" path="res://hud.gd" id="1_bjper"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_bjper")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -256.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0, 0.34902, 0.203922, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Room1" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Room1"
+
+[node name="Room2" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Room2"
+
+[node name="Room3" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "Room3"
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room1" to="." method="_on_room1_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room2" to="." method="_on_room2_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room3" to="." method="_on_room3_pressed"]
