@@ -77,6 +77,7 @@ static func new_wall_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	tile.empty = false
 	return tile
 
+
 static func new_entrance_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	var tile = Tile.new()
 	tile.empty = false
@@ -84,11 +85,20 @@ static func new_entrance_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile
 	tile.room_type = room_type
 	tile.wall_type = Tile.WALL_TYPES.NONE
 	return tile
-	
+
+
 static func new_exit_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	var tile = Tile.new()
 	tile.empty = false
 	tile.exit = true
 	tile.room_type = room_type
 	tile.wall_type = Tile.WALL_TYPES.NONE
+	return tile
+
+
+static func new_pit_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
+	var tile = Tile.new()
+	tile.room_type = room_type
+	tile.wall_type = Tile.WALL_TYPES.PIT
+	tile.empty = false
 	return tile
