@@ -21,6 +21,7 @@ func _ready() -> void:
 	var room1Fow: ColorRect = get_node("Rooms/Room1/FOW")
 	room1Fow.color.a = 0
 
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var position: Vector2
