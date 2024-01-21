@@ -35,3 +35,5 @@ func handlePlayerMoved(position: Vector2) -> void:
 	creep_tiles.append(tilePos)
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 	
+func get_tile_pos_from_global_pos(position: Vector2) -> Vector2:
+	return local_to_map(to_local(position))

@@ -1797,7 +1797,7 @@ script = ExtResource("4_s6hjg")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_65mnp")
 animation = &"pulse"
-frame_progress = 0.565281
+frame_progress = 0.201432
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_j16gc")

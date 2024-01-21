@@ -28,6 +28,10 @@ func can_walk() -> bool:
 	return true
 
 func txt() -> String :
+	if entrance :
+		return " I "
+	if exit :
+		return " O "
 	if wall_type == WALL_TYPES.WALL:
 		return " W ";
 	if wall_type == WALL_TYPES.ACID:
@@ -71,4 +75,20 @@ static func new_wall_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	tile.room_type = room_type
 	tile.wall_type = Tile.WALL_TYPES.WALL
 	tile.empty = false
+	return tile
+
+static func new_entrance_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
+	var tile = Tile.new()
+	tile.empty = false
+	tile.entrance = true
+	tile.room_type = room_type
+	tile.wall_type = Tile.WALL_TYPES.NONE
+	return tile
+	
+static func new_exit_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
+	var tile = Tile.new()
+	tile.empty = false
+	tile.exit = true
+	tile.room_type = room_type
+	tile.wall_type = Tile.WALL_TYPES.NONE
 	return tile
