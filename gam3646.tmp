@@ -1798,7 +1798,7 @@ script = ExtResource("4_s6hjg")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_65mnp")
 animation = &"pulse"
-frame_progress = 0.49728
+frame_progress = 0.46673
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_j16gc")
@@ -1875,6 +1875,7 @@ offset_bottom = 56.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [node name="ColorRect" type="ColorRect" parent="Rooms"]
+visible = false
 offset_left = 288.0
 offset_top = -32.0
 offset_right = 752.0
@@ -1882,6 +1883,7 @@ offset_bottom = 112.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [node name="ColorRect2" type="ColorRect" parent="Rooms"]
+visible = false
 offset_left = -32.0
 offset_top = 112.0
 offset_right = 112.0
@@ -1889,6 +1891,7 @@ offset_bottom = 392.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [node name="ColorRect3" type="ColorRect" parent="Rooms"]
+visible = false
 offset_left = 112.0
 offset_top = 224.0
 offset_right = 224.0
@@ -1896,6 +1899,7 @@ offset_bottom = 392.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [node name="ColorRect4" type="ColorRect" parent="Rooms"]
+visible = false
 offset_left = 224.0
 offset_top = 304.0
 offset_right = 416.0

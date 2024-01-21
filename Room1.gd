@@ -1,6 +1,8 @@
 extends Area2D
 #turn into packed scene or a class?, load spec from file
 
+signal room_entered
+
 #room one learn about basic movement
 var mobs = []
 var map: Array = []
@@ -12,6 +14,10 @@ var exit_pos : Vector2i
 var exit_direction : String
 var entrance_pos : Vector2i
 var entrance_direction : String
+var room_name = "room1"
+var room_origin = Vector2i(0,0)
+
+@onready var fow: ColorRect = $FOW
 
 #for now rooms should be either 7x7, 7x12, 12x7, or 12x12 (actually 5 or 10, but room for boundary and entrance/exit)
 func _ready() -> void:
@@ -20,26 +26,27 @@ func _ready() -> void:
 	size_y = 7
 	build_room()
 
-#TODO test
+#takes position in global tile space
 func can_walk(position: Vector2i, direction: String) -> bool:
-	print("current position: " + str(position)) 
+	print("current global tile position: " + str(position)) 
+	var local_tile_pos = position-room_origin
+	print("current room tile position: " + str(local_tile_pos)) 
 	print("direction: " + direction) 
-	if position == entrance_pos:
+	if local_tile_pos == entrance_pos:
 		print("entrance tile")
 		if direction == entrance_direction:
 			return true
 		else:
 			return false
-	if position == exit_pos:
+	if local_tile_pos == exit_pos:
 		print("exit tile")
 		if direction == exit_direction:
 			return true
 		else:
 			return false
-	var nextTile = get_adjacent_tile(position, direction) 
+	var nextTile = get_adjacent_tile(local_tile_pos, direction) 
 	print("next tile type: " + nextTile.txt())
 	return nextTile.can_walk()
-	
 #TODO do same with can_jump
 
 
@@ -58,7 +65,7 @@ func get_adjacent_tile(position: Vector2i, direction: String) -> Tile:
 	return get_tile(position.x,position.y) #TODO change to vector 
 
 
-func debugPrintRoom() -> void:
+func debug_print_room() -> void:
 	for y in size_y :
 		var row = "[ "
 		for x in size_x :
@@ -73,6 +80,14 @@ func set_tile(tile: Tile, x: int, y: int) -> void :
 
 func get_tile(x: int, y: int) -> Tile :
 	return map[y*size_y+x]
+
+
+func hide_fow() -> void:
+	fow.color.a = 0
+
+
+func show_fow() -> void:
+	fow.color.a = 65
 
 
 func build_room() -> void:
@@ -142,4 +157,9 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(wall_tile)
 	
-	debugPrintRoom()
+	debug_print_room()
+
+
+func _on_body_entered(body: Node2D) -> void:
+	print("body entered room 1")
+	room_entered.emit(room_name)
