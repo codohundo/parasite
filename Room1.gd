@@ -16,6 +16,7 @@ var entrance_pos : Vector2i
 var entrance_direction : String
 var room_name = "room1"
 var room_origin = Vector2i(0,0)
+var movement_cost = 5
 
 @onready var fow: ColorRect = $FOW
 

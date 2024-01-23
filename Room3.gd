@@ -9,21 +9,21 @@ var map: Array = []
 var size_x = 0
 var size_y = 0
 var empty_tile = Tile.new()
-var room_type = Tile.ROOM_TYPES.NORMAL
+var room_type = Tile.ROOM_TYPES.TOXIC
 var exit_pos : Vector2i
 var exit_direction : String
 var entrance_pos : Vector2i
 var entrance_direction : String
-var room_name = "room2"
-var room_origin = Vector2i(7,0)
-var movement_cost = 5
+var room_name = "room3"
+var room_origin = Vector2i(7,7)
+var movement_cost = 10
 
 @onready var fow: ColorRect = $FOW
 
 #for now rooms should be either 7x7, 7x12, 12x7, or 12x12 (actually 5 or 10, but room for boundary and entrance/exit)
 func _ready() -> void:
 #func _init(room_size_x: int, room_size_y: int) -> void:
-	size_x = 12
+	size_x = 7
 	size_y = 7
 	build_room()
 
@@ -226,7 +226,7 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(wall_tile)
 	exit_direction = "down"
-	exit_pos = Vector2(2,6)
+	exit_pos = Vector2(0,2)
 	
 	debug_print_room()
 

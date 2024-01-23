@@ -6,6 +6,7 @@ extends Node
 @onready var player: Player = $Player
 @onready var room1 = $Rooms/Room1
 @onready var room2 = $Rooms/Room2
+@onready var room3 = $Rooms/Room3
 
 @onready var pointer = load("res://Assets/pointer.png")
 @onready var target = load("res://Assets/target.png")
@@ -15,7 +16,7 @@ signal game_event
 
 enum STATES {NORMAL, CASTING_RANGE}
 enum ABILIITIES {NONE, EAT}
-var movement_cost = 5
+var movement_cost = 5 #move to tile?
 
 var current_room: Node2D
 var current_state: STATES = STATES.NORMAL
@@ -49,6 +50,7 @@ func _ready() -> void:
 	var startingPos  = player.global_position
 	handle_player_moved(startingPos)
 	current_room.hide_fow()
+	movement_cost = current_room.movement_cost
 	print("cp: " + str(camera.position))
 	print("event: tutorial_basic_movement")
 	game_event.emit("tutorial_basic_movement")
