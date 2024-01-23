@@ -1806,6 +1806,7 @@ shape = SubResource("CapsuleShape2D_j16gc")
 [node name="Rooms" type="Node" parent="."]
 
 [node name="Room1" type="Area2D" parent="Rooms"]
+visible = false
 script = ExtResource("7_myllj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rooms/Room1"]

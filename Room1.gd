@@ -113,6 +113,8 @@ func build_room() -> void:
 	var floor_tile = Tile.new_floor_tile()
 	var entrance_tile = Tile.new_entrance_tile()
 	var exit_tile = Tile.new_exit_tile()
+	var event_tile = Tile.new_floor_tile()
+	event_tile.event = "tutorial_spread"
 
 	#row by row, need to refactor this, pull from resource?
 	map.append(wall_tile)
@@ -162,7 +164,7 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(floor_tile)
-	map.append(floor_tile)
+	map.append(event_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)

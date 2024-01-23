@@ -11,6 +11,7 @@ extends Node
 @onready var target = load("res://Assets/target.png")
 
 signal STATE_CHANGE
+signal game_event
 
 enum STATES {NORMAL, CASTING_RANGE}
 enum ABILIITIES {NONE, EAT}
@@ -42,6 +43,7 @@ func _ready() -> void:
 	#change room to room 1 to start, then use handle room change to do follow
 	current_room.hide_fow()
 	print("cp: " + str(camera.position))
+	game_event.emit("tutorial_basic_movement")
 
 func process_input(direction: String, current_position: Vector2i) -> void :
 	var new_position: Vector2
