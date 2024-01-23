@@ -1,8 +1,17 @@
 extends CharacterBody2D
+class_name Player
 
-signal playerMoved 
+signal player_moved 
+signal player_energy_zero
+signal player_energey_boosted #TODO tutorial popup here, we've boosted your energy for this room, nobody dies in the first room
 
 @onready var anim = $AnimatedSprite2D
+
+var energy = 100
+var current_max_energy = 200
+var movement_cost = 5
+var infinite_energy: bool = false
+
 
 func _ready() -> void:
 	anim.play("pulse")
@@ -10,6 +19,21 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func eat(mob: Object) -> void :
+	print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
+	energy += mob.consumption_energy
+	print("Swallow it's soul")
+	print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
+
+func pay_energy(cost: int) :
+	energy -= cost
+	print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
+	if infinite_energy && energy < 10 :
+		energy = 50
+		player_energey_boosted.emit()
+	if energy <= 0 :
+		player_energy_zero.emit()
 
 
 func move_cardinal(direction: String) -> Vector2:

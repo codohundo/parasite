@@ -1,4 +1,5 @@
 class_name Tile
+signal tile_event
 
 enum ROOM_TYPES {NORMAL, VIBRANT, TOXIC, SUPRESSIVE}
 enum WALL_TYPES {NONE, WALL, PIT, WATER, ACID}
@@ -7,10 +8,11 @@ var empty: bool = true
 
 var room_type = ROOM_TYPES.NORMAL 
 var wall_type = WALL_TYPES.NONE
-var mob : Mob
+var mob
 #var objects = []
 var entrance : bool
 var exit : bool
+var event : String = ""
 
 func can_walk() -> bool:
 	assert(!empty, "attempting to use empty tile")
@@ -23,7 +25,7 @@ func can_walk() -> bool:
 		return false
 	if wall_type == WALL_TYPES.WALL:
 		return false
-	if mob != null and !mob.share():
+	if mob != null and !mob.share:
 		return false
 	return true
 
@@ -61,6 +63,12 @@ func can_jump() -> bool:
 		return false
 	return true
 
+
+func send_signal() -> void:
+	if event != "" :
+		print("seinding signal: " + event)
+		tile_event.emit(event)
+	
 
 static func new_floor_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	var tile = Tile.new()

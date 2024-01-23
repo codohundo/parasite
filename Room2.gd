@@ -73,13 +73,30 @@ func debug_print_room() -> void:
 		row += " ]"
 		print(row)
 
-
+#coords local to current room
 func set_tile(tile: Tile, x: int, y: int) -> void :
 	map[y*size_y+x] = tile
 
 
+#global tile map coords
+func get_tile_global(global_pos: Vector2i) -> Tile:
+	var local_pos = global_pos - room_origin
+	return get_tile(local_pos.x, local_pos.y)
+
+
 func get_tile(x: int, y: int) -> Tile :
 	return map[y*size_x+x]
+
+
+func get_mob_at(global_pos: Vector2i) -> Object:
+	var target_tile = get_tile_global(global_pos)
+	return target_tile.mob
+
+
+func kill_mob_at(global_pos: Vector2i):
+	var target_tile = get_tile_global(global_pos)
+	target_tile.mob = null
+	#TODO emit killed event, catch somewhere and show an animation
 
 
 func hide_fow() -> void:
@@ -96,7 +113,16 @@ func build_room() -> void:
 	var entrance_tile = Tile.new_entrance_tile()
 	var pit_tile = Tile.new_pit_tile()
 	var exit_tile = Tile.new_exit_tile()
-
+	var mob = ParasiteMob.new()
+	mob.mob_name = "Spectral Flame"
+	mob.grabby = false
+	mob.consumption_energy = 75
+	mob.share = false
+	mobs.append(mob)
+	var mob_tile = Tile.new_floor_tile()
+	mob_tile.mob = mob
+	var event_tile = Tile.new_floor_tile()
+	event_tile.event = "tutorial_better_eat"
 	#row by row, need to refactor this, pull from resource?
 	map.append(wall_tile)
 	map.append(wall_tile)
@@ -114,8 +140,8 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
+	map.append(mob_tile)
+	map.append(event_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)

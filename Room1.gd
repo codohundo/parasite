@@ -78,8 +78,26 @@ func set_tile(tile: Tile, x: int, y: int) -> void :
 	map[y*size_y+x] = tile
 
 
-func get_tile(x: int, y: int) -> Tile :
+#assumes room local coords
+func get_tile(x: int, y: int) -> Tile : #TODO convert to vector
 	return map[y*size_y+x]
+
+
+func get_mob_at(global_pos: Vector2i) -> Object:
+	var target_tile = get_tile_global(global_pos)
+	return target_tile.mob
+
+
+func kill_mob_at(global_pos: Vector2i):
+	var target_tile = get_tile_global(global_pos)
+	target_tile.mob = null
+	#TODO emit killed event, catch somewhere and show an animation
+
+
+#global tile map coords
+func get_tile_global(global_pos: Vector2i) -> Tile:
+	var local_pos = global_pos - room_origin
+	return get_tile(local_pos.x, local_pos.y)
 
 
 func hide_fow() -> void:
