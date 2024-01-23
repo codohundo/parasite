@@ -161,6 +161,7 @@ func handle_room_change(room_name: String) -> void:
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)
 	var energy_string: String = ""
+	$HUD.set_energy(player.energy)
 
 
 func handle_player_dead() -> void:

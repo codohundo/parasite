@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c2okcv2ojj0sn"]
+[gd_scene load_steps=4 format=3 uid="uid://c2okcv2ojj0sn"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_bjper"]
+[ext_resource type="Texture2D" uid="uid://bnngt34hteq2a" path="res://Assets/under.png" id="2_2ap1d"]
+[ext_resource type="Texture2D" uid="uid://djaakyn12jehd" path="res://Assets/progress.png" id="3_olceo"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bjper")
@@ -51,6 +53,74 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "Room3"
 
+[node name="TopBarHBoxContainer" type="HBoxContainer" parent="."]
+offset_left = 20.0
+offset_top = 5.0
+offset_right = 962.0
+offset_bottom = 101.0
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="EnergyVBox" type="VBoxContainer" parent="TopBarHBoxContainer"]
+layout_mode = 2
+
+[node name="EnergyLabel" type="Label" parent="TopBarHBoxContainer/EnergyVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Energy"
+horizontal_alignment = 1
+
+[node name="EnergyProgressBar" type="TextureProgressBar" parent="TopBarHBoxContainer/EnergyVBox"]
+layout_mode = 2
+value = 50.0
+texture_under = ExtResource("2_2ap1d")
+texture_progress = ExtResource("3_olceo")
+
+[node name="AbilitiesContainer" type="VBoxContainer" parent="TopBarHBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Abilities Label" type="Label" parent="TopBarHBoxContainer/AbilitiesContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Abilities"
+horizontal_alignment = 1
+
+[node name="AbilitiesContainer" type="HBoxContainer" parent="TopBarHBoxContainer/AbilitiesContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="JumpButton" type="Button" parent="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+disabled = true
+text = "Jump"
+
+[node name="EatButton" type="Button" parent="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Eat"
+
+[node name="ScoreVBox2" type="VBoxContainer" parent="TopBarHBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="ScoreLabel" type="Label" parent="TopBarHBoxContainer/ScoreVBox2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Score
+"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="TopBarHBoxContainer/ScoreVBox2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "20
+"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room1" to="." method="_on_room1_pressed"]
 [connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room2" to="." method="_on_room2_pressed"]
 [connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room3" to="." method="_on_room3_pressed"]
+[connection signal="pressed" from="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer/JumpButton" to="." method="_on_jump_button_pressed"]
+[connection signal="pressed" from="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer/EatButton" to="." method="_on_eat_button_pressed"]
