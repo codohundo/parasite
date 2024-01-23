@@ -43,6 +43,7 @@ func _ready() -> void:
 	#change room to room 1 to start, then use handle room change to do follow
 	current_room.hide_fow()
 	print("cp: " + str(camera.position))
+	print("event: tutorial_basic_movement")
 	game_event.emit("tutorial_basic_movement")
 
 func process_input(direction: String, current_position: Vector2i) -> void :
@@ -50,6 +51,9 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 	current_room.debug_print_room()
 	if player.energy < movement_cost :
 		print("too weak")
+		game_event.emit("tutorial_game_over")
+		#dialog
+		#reset, or just exit for now, might be easir until rooms are dynamically loaded
 		return
 	print("going " + direction)
 	if current_room.can_walk(current_position, direction):
@@ -93,8 +97,8 @@ func _process(delta: float) -> void:
 			var pos = map.get_local_mouse_position()
 			var tilePos = map.local_to_map(pos)
 			print("target clicked at: " + str(tilePos))
+			#TODO limit range on that eat lol
 			target_selected(tilePos)
-			
 			current_state = STATES.NORMAL
 			STATE_CHANGE.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
@@ -110,6 +114,7 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 			if mob != null :
 				print( "eating: " + mob.mob_name)
 				player.eat(mob)
+				game_event.emit("tutorial_eating_energy")
 				current_room.kill_mob_at(current_global_tile_pos)
 				map.remove_spite(current_global_tile_pos)
 

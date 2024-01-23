@@ -121,8 +121,16 @@ func build_room() -> void:
 	mobs.append(mob)
 	var mob_tile = Tile.new_floor_tile()
 	mob_tile.mob = mob
+	var mob_tile2 = Tile.new_floor_tile()
+	mob_tile2.mob = mob
+	var mob_tile3 = Tile.new_floor_tile()
+	mob_tile3.mob = mob
 	var event_tile = Tile.new_floor_tile()
 	event_tile.event = "tutorial_better_eat"
+	var event_tile2 = Tile.new_floor_tile()
+	event_tile2.event = "tutorial_hole"
+	var event_tile3 = Tile.new_floor_tile()
+	event_tile3.event = "tutorial_eat_up"
 	#row by row, need to refactor this, pull from resource?
 	map.append(wall_tile)
 	map.append(wall_tile)
@@ -156,7 +164,7 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
-	map.append(floor_tile)
+	map.append(event_tile2)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
@@ -173,7 +181,7 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(pit_tile)
 	map.append(wall_tile)
-	map.append(floor_tile)
+	map.append(mob_tile2)
 	map.append(floor_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
@@ -192,8 +200,8 @@ func build_room() -> void:
 	map.append(wall_tile)
 
 	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
+	map.append(mob_tile3)
+	map.append(event_tile3)
 	map.append(floor_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)

@@ -1787,7 +1787,7 @@ layer_1/tile_data = PackedInt32Array(65536, 720896, 11, 0, 393216, 10, 1, 589824
 layer_2/name = "Objects"
 layer_2/tile_data = PackedInt32Array()
 layer_3/name = "mobs"
-layer_3/tile_data = PackedInt32Array(65546, 2, 0)
+layer_3/tile_data = PackedInt32Array(65546, 2, 0, 196623, 2, 0, 327688, 2, 0)
 script = ExtResource("4_j57s7")
 
 [node name="Player" type="CharacterBody2D" parent="."]
@@ -1806,7 +1806,6 @@ shape = SubResource("CapsuleShape2D_j16gc")
 [node name="Rooms" type="Node" parent="."]
 
 [node name="Room1" type="Area2D" parent="Rooms"]
-visible = false
 script = ExtResource("7_myllj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Rooms/Room1"]
