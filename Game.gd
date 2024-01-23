@@ -10,7 +10,7 @@ extends Node
 @onready var pointer = load("res://Assets/pointer.png")
 @onready var target = load("res://Assets/target.png")
 
-signal STATE_CHANGE
+signal state_change
 signal game_event
 
 enum STATES {NORMAL, CASTING_RANGE}
@@ -21,15 +21,23 @@ var current_room: Node2D
 var current_state: STATES = STATES.NORMAL
 var current_ability: ABILIITIES = ABILIITIES.NONE
 
-#todo 
-#design first couple of creaters
-#design first couple of abilities
-#	jump
+#TODO for mvp
+#design 2nd creater
+#design jump
+#design attack
+#design 3rd room, movment cost goes up
+#
 #design upgrade system?
 #	possible upgrades, redusced cost, extra energy, new ablilities (jump, float, pull, push, extinguise)
+#refactor rooms to be dynamically loaded
+#handle game over
+#basic UI
+#basic tutorial
+#input mapping
+#controller support
+#limit ability range
+#SOUND
 
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hud.roomChange.connect(handle_room_change)
 	room1.room_entered.connect(handle_room_change)
@@ -40,7 +48,6 @@ func _ready() -> void:
 	player.infinite_energy = true
 	var startingPos  = player.global_position
 	handle_player_moved(startingPos)
-	#change room to room 1 to start, then use handle room change to do follow
 	current_room.hide_fow()
 	print("cp: " + str(camera.position))
 	print("event: tutorial_basic_movement")
@@ -52,8 +59,8 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 	if player.energy < movement_cost :
 		print("too weak")
 		game_event.emit("tutorial_game_over")
-		#dialog
-		#reset, or just exit for now, might be easir until rooms are dynamically loaded
+		#TODO popup dialog game over man
+		#TODO reset, or just exit for now, might be easir until rooms are dynamically loaded
 		return
 	print("going " + direction)
 	if current_room.can_walk(current_position, direction):
@@ -71,8 +78,8 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 		handle_player_moved(new_position)
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	#TODO this whole thing should be handled in an _input func  I think?
 	var current_position = map.get_tile_pos_from_global_pos(player.global_position)
 	var new_position: Vector2
 	if current_state == STATES.NORMAL :
@@ -90,17 +97,16 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("cancel") :
 			print("cancel pressed")
 			current_state = STATES.NORMAL
-			STATE_CHANGE.emit(STATES.NORMAL)
+			state_change.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
 		if Input.is_action_just_pressed("target") :
-			#TODO this whole thing should be handled in an _input func  I think?
 			var pos = map.get_local_mouse_position()
 			var tilePos = map.local_to_map(pos)
 			print("target clicked at: " + str(tilePos))
 			#TODO limit range on that eat lol
 			target_selected(tilePos)
 			current_state = STATES.NORMAL
-			STATE_CHANGE.emit(STATES.NORMAL)
+			state_change.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
@@ -118,12 +124,10 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				current_room.kill_mob_at(current_global_tile_pos)
 				map.remove_spite(current_global_tile_pos)
 
-
-
 func start_eat():
 	current_state = STATES.CASTING_RANGE
 	print("eat mode")
-	STATE_CHANGE.emit(current_state)
+	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
 	current_ability = ABILIITIES.EAT
 
@@ -152,19 +156,7 @@ func handle_room_change(room_name: String) -> void:
 				#current_room = room3
 				current_room.hide_fow()
 				camera.position = Vector2i(168,200)
-	#todo on room change
-		#shround current room (cover with 2d solid color grey with a bit of alpha) 
-		#move player to start of next room
-		#move camera to start of next room
-			# snap camera to center of room detection area 2d
-				# maybe when player enters room, room collider can send event to camera, 
-				# packing in event source node, 
-				# camera can handle event, and center on source node
-				# other rooms can hid themselvs
-				# this room can show itself 
-				# then that room node can handle custom logig for that room
-		#unshroud next room
-	
+
 
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)
