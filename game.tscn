@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Room1.gd" id="7_myllj"]
 [ext_resource type="Script" path="res://Room2.gd" id="8_18dhs"]
 [ext_resource type="Script" path="res://Room3.gd" id="9_opovf"]
+[ext_resource type="PackedScene" uid="uid://c2okcv2ojj0sn" path="res://hud.tscn" id="9_k2sem"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uieal"]
 texture = ExtResource("2_urr8y")
@@ -1919,6 +1920,8 @@ offset_top = 112.0
 offset_right = 752.0
 offset_bottom = 392.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
+
+[node name="HUD" parent="." instance=ExtResource("9_k2sem")]
 
 [connection signal="body_entered" from="Rooms/Room1" to="Rooms/Room1" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room2" to="Rooms/Room2" method="_on_body_entered"]
