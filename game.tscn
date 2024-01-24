@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://ce4gfw8nedaw5"]
+[gd_scene load_steps=26 format=3 uid="uid://ce4gfw8nedaw5"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_7yt4q"]
 [ext_resource type="Texture2D" uid="uid://bq3cxnnbj3ahf" path="res://Assets/TileSet.png" id="2_urr8y"]
@@ -8,8 +8,8 @@
 [ext_resource type="Script" path="res://Player.gd" id="4_s6hjg"]
 [ext_resource type="Script" path="res://Room1.gd" id="7_myllj"]
 [ext_resource type="Script" path="res://Room2.gd" id="8_18dhs"]
-[ext_resource type="Script" path="res://Room3.gd" id="9_opovf"]
 [ext_resource type="PackedScene" uid="uid://c2okcv2ojj0sn" path="res://hud.tscn" id="9_k2sem"]
+[ext_resource type="Script" path="res://Room3.gd" id="9_opovf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uieal"]
 texture = ExtResource("2_urr8y")
@@ -1925,3 +1925,4 @@ color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [connection signal="body_entered" from="Rooms/Room1" to="Rooms/Room1" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room2" to="Rooms/Room2" method="_on_body_entered"]
+[connection signal="ability_selected" from="HUD" to="." method="_on_hud_ability_selected"]

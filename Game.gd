@@ -14,13 +14,14 @@ extends Node
 signal state_change
 signal game_event
 
+const Enums = preload("res://Enums.gd")
+const ABILITIES = Enums.ABILITIES
 enum STATES {NORMAL, CASTING_RANGE}
-enum ABILIITIES {NONE, EAT}
 var movement_cost = 5 #move to tile?
 
 var current_room: Node2D
 var current_state: STATES = STATES.NORMAL
-var current_ability: ABILIITIES = ABILIITIES.NONE
+var current_ability: ABILITIES = ABILITIES.NONE
 
 #TODO for mvp
 #design 2nd creater
@@ -113,10 +114,10 @@ func _process(delta: float) -> void:
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
 	match current_ability :
-		ABILIITIES.NONE :
+		ABILITIES.NONE :
 			print("no active ability")
 			return
-		ABILIITIES.EAT :
+		ABILITIES.EAT :
 			print("find mob")
 			var mob = current_room.get_mob_at(current_global_tile_pos)
 			if mob != null :
@@ -125,13 +126,14 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				game_event.emit("tutorial_eating_energy")
 				current_room.kill_mob_at(current_global_tile_pos)
 				map.remove_spite(current_global_tile_pos)
+				$HUD.set_ability_available(current_ability)
 
 func start_eat():
 	current_state = STATES.CASTING_RANGE
 	print("eat mode")
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
-	current_ability = ABILIITIES.EAT
+	current_ability = ABILITIES.EAT
 
 
 #TODO when converting rooms to a proper class and loading from a file, change this from room name to 
@@ -168,3 +170,8 @@ func handle_player_moved(position: Vector2)  -> void :
 
 func handle_player_dead() -> void:
 	print("you dead!")
+
+
+func _on_hud_ability_selected(ability_selected: ABILITIES):
+	if ability_selected == ABILITIES.EAT:
+		start_eat()
