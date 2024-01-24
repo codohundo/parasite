@@ -27,6 +27,16 @@ func _ready() -> void:
 	size_y = 7
 	build_room()
 
+
+#takes position in global tile space
+func can_land(position: Vector2i) -> bool:
+	print("current global tile position: " + str(position)) 
+	var local_tile_pos = position-room_origin
+	print("current room tile position: " + str(local_tile_pos)) 
+	var tile = get_tile(local_tile_pos.x, local_tile_pos.y)
+	return tile.can_walk()
+
+
 #takes position in global tile space
 func can_walk(position: Vector2i, direction: String) -> bool:
 	print("current global tile position: " + str(position)) 
@@ -82,7 +92,18 @@ func set_tile(tile: Tile, x: int, y: int) -> void :
 #global tile map coords
 func get_tile_global(global_pos: Vector2i) -> Tile:
 	var local_pos = global_pos - room_origin
+	if !is_inside_room(local_pos) :
+		return null
 	return get_tile(local_pos.x, local_pos.y)
+
+
+func is_inside_room(local_pos: Vector2i) -> bool :
+	print("is local_pos: " + str(local_pos) + " inside:(" + str(size_x) + ", " + str(size_y) + ")")
+	if local_pos.x < 0 || local_pos.x >= size_x :
+		return false
+	if local_pos.y < 0 || local_pos.y >= size_y :
+		return false
+	return true
 
 
 func get_tile(x: int, y: int) -> Tile :
@@ -110,7 +131,7 @@ func show_fow() -> void:
 
 func build_room() -> void:
 	var wall_tile = Tile.new_wall_tile()
-	var floor_tile = Tile.new_floor_tile()
+	var floor_tile = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
 	var entrance_tile = Tile.new_entrance_tile()
 	var pit_tile = Tile.new_pit_tile()
 	var exit_tile = Tile.new_exit_tile()
@@ -120,92 +141,58 @@ func build_room() -> void:
 	mob.consumption_energy = 75
 	mob.share = false
 	mobs.append(mob)
-	var mob_tile = Tile.new_floor_tile()
+	var mob_tile = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
 	mob_tile.mob = mob
-	var mob_tile2 = Tile.new_floor_tile()
-	mob_tile2.mob = mob
-	var mob_tile3 = Tile.new_floor_tile()
-	mob_tile3.mob = mob
-	var event_tile = Tile.new_floor_tile()
-	event_tile.event = "tutorial_better_eat"
-	var event_tile2 = Tile.new_floor_tile()
-	event_tile2.event = "tutorial_hole"
-	var event_tile3 = Tile.new_floor_tile()
-	event_tile3.event = "tutorial_eat_up"
+	var event_tile = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	event_tile.event = "tutorial_water"
+	var water_tile = Tile.new_water_tile(Tile.ROOM_TYPES.TOXIC)
+	
 	#row by row, need to refactor this, pull from resource?
 	map.append(wall_tile)
 	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(mob_tile)
-	map.append(event_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	
 	map.append(entrance_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(event_tile2)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
-	map.append(floor_tile)
 	map.append(wall_tile)
-	entrance_direction = "right"
-	entrance_pos = Vector2(0,2)
+	entrance_direction = "down"
+	entrance_pos = Vector2(2,0)
 	
 	map.append(wall_tile)
 	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(pit_tile)
-	map.append(wall_tile)
-	map.append(mob_tile2)
+	map.append(event_tile)
+	map.append(water_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
 	
 	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
 	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
 
 	map.append(wall_tile)
-	map.append(mob_tile3)
-	map.append(event_tile3)
 	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
 	map.append(floor_tile)
+	map.append(wall_tile)
+	
+	map.append(wall_tile)
 	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(mob_tile)
+	map.append(water_tile)
+	map.append(floor_tile)
+	map.append(exit_tile)
+	exit_direction = "right"
+	exit_pos = Vector2(6,4)
+	
+	map.append(wall_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)
 	map.append(floor_tile)
@@ -215,22 +202,15 @@ func build_room() -> void:
 	
 	map.append(wall_tile)
 	map.append(wall_tile)
-	map.append(exit_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	exit_direction = "down"
-	exit_pos = Vector2(0,2)
 	
 	debug_print_room()
 
 
 func _on_body_entered(body: Node2D) -> void:
-	print("body entered room 2")
+	print("body entered room 3")
 	room_entered.emit(room_name)

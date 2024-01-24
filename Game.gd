@@ -7,6 +7,7 @@ extends Node
 @onready var room1 = $Rooms/Room1
 @onready var room2 = $Rooms/Room2
 @onready var room3 = $Rooms/Room3
+@onready var room4 = $Rooms/Room4
 
 @onready var pointer = load("res://Assets/pointer.png")
 @onready var target = load("res://Assets/target.png")
@@ -15,7 +16,7 @@ signal state_change
 signal game_event
 
 enum STATES {NORMAL, CASTING_RANGE}
-enum ABILIITIES {NONE, EAT}
+enum ABILIITIES {NONE, EAT, JUMP}
 var movement_cost = 5 #move to tile?
 
 var current_room: Node2D
@@ -43,6 +44,8 @@ func _ready() -> void:
 	hud.roomChange.connect(handle_room_change)
 	room1.room_entered.connect(handle_room_change)
 	room2.room_entered.connect(handle_room_change)
+	room3.room_entered.connect(handle_room_change)
+	room4.room_entered.connect(handle_room_change)
 	player.player_energy_zero.connect(handle_player_dead)
 	Input.set_custom_mouse_cursor(pointer, Input.CURSOR_ARROW)
 	current_room = room1
@@ -71,10 +74,14 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 		print("current position: " + str(current_position))
 		print("current global tile pos: " + str(current_tile_pos))
 		new_position = player.move_cardinal(direction)#TODO convert to enum
+		#TODO new tile pos doesn't work if changing rooms, need to change room first
+		#then getnew tile pos
+		player.pay_energy(movement_cost)
 		var new_tile_pos = map.get_tile_pos_from_global_pos(new_position)
 		var new_tile: Tile = current_room.get_tile_global(new_tile_pos)
-		new_tile.send_signal()
-		player.pay_energy(movement_cost)
+		if new_tile != null :
+			new_tile.send_signal()
+		
 		print("new position: " + str(map.get_tile_pos_from_global_pos(new_position)))
 		print("new tile global pos: " + str(new_tile_pos))
 		handle_player_moved(new_position)
@@ -94,7 +101,12 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("down") :
 			process_input("down", current_position)
 		if Input.is_action_just_pressed("eat") :
+			#check level
 			start_eat()
+		if Input.is_action_just_pressed("jump") :
+			#check level
+			#check energy
+			start_jump()
 	elif current_state == STATES.CASTING_RANGE :
 		if Input.is_action_just_pressed("cancel") :
 			print("cancel pressed")
@@ -105,7 +117,6 @@ func _process(delta: float) -> void:
 			var pos = map.get_local_mouse_position()
 			var tilePos = map.local_to_map(pos)
 			print("target clicked at: " + str(tilePos))
-			#TODO limit range on that eat lol
 			target_selected(tilePos)
 			current_state = STATES.NORMAL
 			state_change.emit(STATES.NORMAL)
@@ -119,21 +130,68 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 		ABILIITIES.EAT :
 			print("find mob")
 			var mob = current_room.get_mob_at(current_global_tile_pos)
-			if mob != null :
+			if mob != null && check_eat_range(current_global_tile_pos,map.local_to_map(player.global_position)):
 				print( "eating: " + mob.mob_name)
 				player.eat(mob)
 				game_event.emit("tutorial_eating_energy")
 				current_room.kill_mob_at(current_global_tile_pos)
 				map.remove_spite(current_global_tile_pos)
+		ABILIITIES.JUMP :
+			print("find square to land in")
+			#click was 2 squares away in a cardnal direction
+			var player_pos_global_tile = map.local_to_map(player.global_position)
+			var x_dist = abs(current_global_tile_pos.x -player_pos_global_tile.x)
+			var y_dist = abs(current_global_tile_pos.y -player_pos_global_tile.y)
+			if !((x_dist == 2 && y_dist == 0) || (x_dist == 0 && y_dist == 2)) :
+				print("no valid target: x_dist " + str(x_dist) + " y_dist: " + str(y_dist))
+				return
+			#get target tile and jumped over tile
+			var landing_tile = current_room.get_tile_global(current_global_tile_pos)
+			if landing_tile == null :
+				print("can't jump out of room")
+				return
+			var skipped_tile_pos = (current_global_tile_pos - player_pos_global_tile) / 2 + player_pos_global_tile
+			print("landing tile: " + str(current_global_tile_pos))
+			if !landing_tile.can_walk() :
+				print("can't land")
+				return
+			print("skipped tile: " + str(skipped_tile_pos))
+			var skipped_tile = current_room.get_tile_global(skipped_tile_pos)
+			if !skipped_tile.can_jump() :
+				print("can't jump")
+				return
+			if(abs(current_global_tile_pos.x -player_pos_global_tile.x) > 0 ):
+				if(current_global_tile_pos.x > player_pos_global_tile.x):
+					player.jump_cardinal("right")
+				else:
+					player.jump_cardinal("left")
+			elif (current_global_tile_pos.y > player_pos_global_tile.y):
+					player.jump_cardinal("down")
+			else:
+				player.jump_cardinal("up")
+			#pay jump cost
+			#spread creep
+			#fire tile events
 
-func start_eat():
+func check_eat_range(pos1: Vector2, pos2: Vector2, padding: float = 0.5)->bool:
+	print("distance from: " + str(pos1) + " to: " + str(pos2))
+	print(pos1.distance_to(pos2))
+	return int(pos1.distance_to(pos2)+padding) < 2
+
+func start_eat()->void:
 	current_state = STATES.CASTING_RANGE
 	print("eat mode")
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
 	current_ability = ABILIITIES.EAT
 
-
+func start_jump()->void:
+	current_state = STATES.CASTING_RANGE
+	print("eat mode")
+	state_change.emit(current_state)
+	Input.set_custom_mouse_cursor(target)
+	current_ability = ABILIITIES.JUMP
+	
 #TODO when converting rooms to a proper class and loading from a file, change this from room name to 
 #the actual room object
 func handle_room_change(room_name: String) -> void:
@@ -143,22 +201,36 @@ func handle_room_change(room_name: String) -> void:
 			"room1":
 				current_room.show_fow()
 				current_room = room1
+				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				camera.position = Vector2i(56,88)
 			"room2":
 				current_room.show_fow()
 				current_room = room2
+				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				current_room.debug_print_room()
 				camera.position = Vector2i(208,88)
 				player.infinite_energy=false
 				player.energy = 50
+				player.level_up() # gain eat
 			"room3":
 				current_room.show_fow()
-				#current_room = room3
+				current_room = room3
+				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				camera.position = Vector2i(168,200)
-
+				game_event.emit("tutorial_toxic_floor")
+			"room4":
+				player.level_up() # gain jumnp
+				print("handle_room_change room 4 started")
+				current_room.show_fow()
+				current_room = room4
+				movement_cost = current_room.movement_cost
+				current_room.hide_fow()
+				camera.position = Vector2i(320,250)
+				game_event.emit("tutorial_vibrant_floor")
+				print("handle_room_change room 4 finished")
 
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)

@@ -1,5 +1,5 @@
 extends Node
-class_name ParasiteMob
+class_name GrabbyMob
 
 var mob_name: String
 var consumption_energy: int

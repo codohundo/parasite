@@ -9,22 +9,22 @@ var map: Array = []
 var size_x = 0
 var size_y = 0
 var empty_tile = Tile.new()
-var room_type = Tile.ROOM_TYPES.NORMAL
+var room_type = Tile.ROOM_TYPES.VIBRANT
 var exit_pos : Vector2i
 var exit_direction : String
 var entrance_pos : Vector2i
 var entrance_direction : String
-var room_name = "room1"
-var room_origin = Vector2i(0,0)
-var movement_cost = 5
+var room_name = "room4"
+var room_origin = Vector2i(14,7)
+var movement_cost = 3
 
 @onready var fow: ColorRect = $FOW
 
 #for now rooms should be either 7x7, 7x12, 12x7, or 12x12 (actually 5 or 10, but room for boundary and entrance/exit)
 func _ready() -> void:
 #func _init(room_size_x: int, room_size_y: int) -> void:
-	size_x = 7
-	size_y = 7
+	size_x = 12
+	size_y = 12
 	build_room()
 
 
@@ -36,7 +36,7 @@ func can_land(position: Vector2i) -> bool:
 	var tile = get_tile(local_tile_pos.x, local_tile_pos.y)
 	return tile.can_walk()
 
-
+ 
 #takes position in global tile space
 func can_walk(position: Vector2i, direction: String) -> bool:
 	print("current global tile position: " + str(position)) 
@@ -84,27 +84,9 @@ func debug_print_room() -> void:
 		row += " ]"
 		print(row)
 
-
+#coords local to current room
 func set_tile(tile: Tile, x: int, y: int) -> void :
 	map[y*size_y+x] = tile
-
-
-#assumes room local coords
-func get_tile(x: int, y: int) -> Tile : #TODO convert to vector
-	return map[y*size_y+x]
-
-
-func get_mob_at(global_pos: Vector2i) -> Object:
-	var target_tile = get_tile_global(global_pos)
-	if target_tile == null :
-		return null
-	return target_tile.mob
-
-
-func kill_mob_at(global_pos: Vector2i):
-	var target_tile = get_tile_global(global_pos)
-	target_tile.mob = null
-	#TODO emit killed event, catch somewhere and show an animation
 
 
 #global tile map coords
@@ -124,6 +106,21 @@ func is_inside_room(local_pos: Vector2i) -> bool :
 	return true
 
 
+func get_tile(x: int, y: int) -> Tile :
+	return map[y*size_x+x]
+
+
+func get_mob_at(global_pos: Vector2i) -> Object:
+	var target_tile = get_tile_global(global_pos)
+	return target_tile.mob
+
+
+func kill_mob_at(global_pos: Vector2i):
+	var target_tile = get_tile_global(global_pos)
+	target_tile.mob = null
+	#TODO emit killed event, catch somewhere and show an animation
+
+
 func hide_fow() -> void:
 	fow.color.a = 0
 
@@ -134,13 +131,37 @@ func show_fow() -> void:
 
 func build_room() -> void:
 	var wall_tile = Tile.new_wall_tile()
-	var floor_tile = Tile.new_floor_tile()
+	var floor_tile = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
 	var entrance_tile = Tile.new_entrance_tile()
+	var pit_tile = Tile.new_pit_tile()
 	var exit_tile = Tile.new_exit_tile()
-	var event_tile = Tile.new_floor_tile()
-	event_tile.event = "tutorial_spread"
+	var mob1 = ParasiteMob.new()
+	mob1.mob_name = "Spectral Flame"
+	mob1.grabby = false
+	mob1.consumption_energy = 75
+	mob1.share = false
+	mob1.mobile = false
+	mobs.append(mob1)
+	var mob2 = GrabbyMob.new()
+	mob2.mob_name = "Grabby"
+	mob2.grabby = true
+	mob2.consumption_energy = 25
+	mob2.share = false
+	mob2.mobile = true
+	mobs.append(mob2)
+	var mob_tile1 = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	mob_tile1.mob = mob1
+	var mob_tile2 = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	mob_tile2.mob = mob2
+	var mob_tile3 = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	mob_tile3.mob = mob1
+	var mob_tile4 = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	mob_tile4.mob = mob2
+	var event_tile = Tile.new_floor_tile(Tile.ROOM_TYPES.TOXIC)
+	event_tile.event = "tutorial_water"
+	var water_tile = Tile.new_water_tile(Tile.ROOM_TYPES.TOXIC)
 
-	#row by row, need to refactor this, pull from resource?
+#0
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
@@ -148,62 +169,172 @@ func build_room() -> void:
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
-	
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+
+#1
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(wall_tile)
+
+#2
 	map.append(wall_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(mob_tile1)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
 	map.append(wall_tile)
-	
+
+#3
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(wall_tile)
+
+#4
 	map.append(entrance_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(exit_tile)
 	entrance_direction = "right"
-	entrance_pos = Vector2(0,2)
-	exit_direction = "right"
-	exit_pos = Vector2(6,2)
-	
-	map.append(wall_tile)
+	entrance_pos = Vector2i(0,4)
 	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(wall_tile)
+	map.append(mob_tile2)
 	map.append(floor_tile)
+	map.append(mob_tile3)
+	map.append(water_tile)
+	map.append(water_tile)
 	map.append(floor_tile)
-	map.append(wall_tile)
-	
-	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(wall_tile)
+	map.append(water_tile)
+	map.append(water_tile)
+	map.append(water_tile)
 	map.append(wall_tile)
 
+#5
 	map.append(wall_tile)
-	map.append(wall_tile)
-	map.append(floor_tile)
-	map.append(event_tile)
 	map.append(floor_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(floor_tile)
+	map.append(water_tile)
+	map.append(floor_tile)
+	map.append(pit_tile)
+	map.append(exit_tile)
+	exit_direction = "right"
+	exit_pos = Vector2(11,5)
 	
+#6
+	map.append(wall_tile)
+	map.append(floor_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
 	map.append(wall_tile)
+	map.append(mob_tile4)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+
+#7
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
 	map.append(wall_tile)
 	
+#8
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	
+#9
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	
+#10
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(floor_tile)
+	map.append(wall_tile)
+	
+#11
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
+	map.append(wall_tile)
 	debug_print_room()
 
 
 func _on_body_entered(body: Node2D) -> void:
-	print("body entered room 1")
+	print("body entered room 4")
 	room_entered.emit(room_name)

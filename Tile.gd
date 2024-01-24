@@ -110,3 +110,10 @@ static func new_pit_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
 	tile.wall_type = Tile.WALL_TYPES.PIT
 	tile.empty = false
 	return tile
+
+static func new_water_tile(room_type: ROOM_TYPES = ROOM_TYPES.NORMAL) -> Tile:
+	var tile = Tile.new()
+	tile.room_type = room_type
+	tile.wall_type = Tile.WALL_TYPES.WATER
+	tile.empty = false
+	return tile

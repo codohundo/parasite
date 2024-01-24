@@ -27,6 +27,16 @@ func _ready() -> void:
 	size_y = 7
 	build_room()
 
+
+#takes position in global tile space
+func can_land(position: Vector2i) -> bool:
+	print("current global tile position: " + str(position)) 
+	var local_tile_pos = position-room_origin
+	print("current room tile position: " + str(local_tile_pos)) 
+	var tile = get_tile(local_tile_pos.x, local_tile_pos.y)
+	return tile.can_walk()
+
+
 #takes position in global tile space
 func can_walk(position: Vector2i, direction: String) -> bool:
 	print("current global tile position: " + str(position)) 
@@ -82,7 +92,18 @@ func set_tile(tile: Tile, x: int, y: int) -> void :
 #global tile map coords
 func get_tile_global(global_pos: Vector2i) -> Tile:
 	var local_pos = global_pos - room_origin
+	if !is_inside_room(local_pos) :
+		return null
 	return get_tile(local_pos.x, local_pos.y)
+
+
+func is_inside_room(local_pos: Vector2i) -> bool :
+	print("is local_pos: " + str(local_pos) + " inside:(" + str(size_x) + ", " + str(size_y) + ")")
+	if local_pos.x < 0 || local_pos.x >= size_x :
+		return false
+	if local_pos.y < 0 || local_pos.y >= size_y :
+		return false
+	return true
 
 
 func get_tile(x: int, y: int) -> Tile :
