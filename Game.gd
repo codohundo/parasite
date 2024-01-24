@@ -15,13 +15,14 @@ extends Node
 signal state_change
 signal game_event
 
+const Enums = preload("res://Enums.gd")
+const ABILITIES = Enums.ABILITIES
 enum STATES {NORMAL, CASTING_RANGE}
-enum ABILIITIES {NONE, EAT, JUMP}
 var movement_cost = 5 #move to tile?
 
 var current_room: Node2D
 var current_state: STATES = STATES.NORMAL
-var current_ability: ABILIITIES = ABILIITIES.NONE
+var current_ability: ABILITIES = ABILITIES.NONE
 
 #TODO for mvp
 #design 2nd creater
@@ -124,10 +125,10 @@ func _process(delta: float) -> void:
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
 	match current_ability :
-		ABILIITIES.NONE :
+		ABILITIES.NONE :
 			print("no active ability")
 			return
-		ABILIITIES.EAT :
+		ABILITIES.EAT :
 			print("find mob")
 			var mob = current_room.get_mob_at(current_global_tile_pos)
 			if mob != null && check_eat_range(current_global_tile_pos,map.local_to_map(player.global_position)):
@@ -136,7 +137,7 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				game_event.emit("tutorial_eating_energy")
 				current_room.kill_mob_at(current_global_tile_pos)
 				map.remove_spite(current_global_tile_pos)
-		ABILIITIES.JUMP :
+		ABILITIES.JUMP :
 			print("find square to land in")
 			#click was 2 squares away in a cardnal direction
 			var player_pos_global_tile = map.local_to_map(player.global_position)
@@ -172,6 +173,7 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 			#pay jump cost
 			#spread creep
 			#fire tile events
+	$HUD.set_ability_available(current_ability)
 
 func check_eat_range(pos1: Vector2, pos2: Vector2, padding: float = 0.5)->bool:
 	print("distance from: " + str(pos1) + " to: " + str(pos2))
@@ -183,14 +185,14 @@ func start_eat()->void:
 	print("eat mode")
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
-	current_ability = ABILIITIES.EAT
+	current_ability = ABILITIES.EAT
 
 func start_jump()->void:
 	current_state = STATES.CASTING_RANGE
 	print("eat mode")
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
-	current_ability = ABILIITIES.JUMP
+	current_ability = ABILITIES.JUMP
 	
 #TODO when converting rooms to a proper class and loading from a file, change this from room name to 
 #the actual room object
@@ -240,3 +242,8 @@ func handle_player_moved(position: Vector2)  -> void :
 
 func handle_player_dead() -> void:
 	print("you dead!")
+
+
+func _on_hud_ability_selected(ability_selected: ABILITIES):
+	if ability_selected == ABILITIES.EAT:
+		start_eat()

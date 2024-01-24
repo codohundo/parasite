@@ -59,7 +59,7 @@ func can_jump() -> bool:
 	assert(!empty, "attempting to use empty tile")
 	if wall_type == WALL_TYPES.WALL:
 		return false
-	if mob != null and mob.grabby():
+	if mob != null and mob.grabby:
 		return false
 	return true
 

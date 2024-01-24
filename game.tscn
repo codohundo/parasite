@@ -1927,3 +1927,4 @@ color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 [connection signal="body_entered" from="Rooms/Room2" to="Rooms/Room2" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room3" to="Rooms/Room3" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room4" to="Rooms/Room4" method="_on_body_entered"]
+[connection signal="ability_selected" from="HUD" to="." method="_on_hud_ability_selected"]

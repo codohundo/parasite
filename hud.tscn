@@ -29,40 +29,48 @@ theme_override_constants/separation = 5
 [node name="HBoxContainer2" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
+size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
+[node name="Label" type="Label" parent="ColorRect/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
-theme_override_constants/separation = 12
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Abilities
+"
+horizontal_alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(20, 0)
+[node name="AbilitiesContainer" type="HBoxContainer" parent="ColorRect/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.08
+alignment = 1
 
-[node name="Room1" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+[node name="JumpButton" type="Button" parent="ColorRect/VBoxContainer/AbilitiesContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 45
-text = "Room1"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+disabled = true
+text = "Jump"
 
-[node name="Room2" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
+[node name="EatButton" type="Button" parent="ColorRect/VBoxContainer/AbilitiesContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 45
-text = "Room2"
-
-[node name="Room3" type="Button" parent="ColorRect/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 45
-text = "Room3"
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Eat"
 
 [node name="TopBarHBoxContainer" type="HBoxContainer" parent="."]
 offset_left = 20.0
 offset_top = 5.0
-offset_right = 962.0
+offset_right = 962.025
 offset_bottom = 101.0
 size_flags_horizontal = 3
 alignment = 1
 
 [node name="EnergyVBox" type="VBoxContainer" parent="TopBarHBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 5.45
 
 [node name="EnergyLabel" type="Label" parent="TopBarHBoxContainer/EnergyVBox"]
 layout_mode = 2
@@ -70,39 +78,22 @@ theme_override_font_sizes/font_size = 30
 text = "Energy"
 horizontal_alignment = 1
 
-[node name="EnergyProgressBar" type="TextureProgressBar" parent="TopBarHBoxContainer/EnergyVBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBarHBoxContainer/EnergyVBox"]
 layout_mode = 2
-value = 50.0
+size_flags_vertical = 3
+
+[node name="EnergyProgressBar" type="TextureProgressBar" parent="TopBarHBoxContainer/EnergyVBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 6.6
+value = 20.0
 texture_under = ExtResource("2_2ap1d")
 texture_progress = ExtResource("3_olceo")
 
-[node name="AbilitiesContainer" type="VBoxContainer" parent="TopBarHBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Abilities Label" type="Label" parent="TopBarHBoxContainer/AbilitiesContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Abilities"
-horizontal_alignment = 1
-
-[node name="AbilitiesContainer" type="HBoxContainer" parent="TopBarHBoxContainer/AbilitiesContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="JumpButton" type="Button" parent="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-disabled = true
-text = "Jump"
-
-[node name="EatButton" type="Button" parent="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "Eat"
-
 [node name="ScoreVBox2" type="VBoxContainer" parent="TopBarHBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="TopBarHBoxContainer/ScoreVBox2"]
@@ -119,8 +110,5 @@ text = "20
 "
 horizontal_alignment = 1
 
-[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room1" to="." method="_on_room1_pressed"]
-[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room2" to="." method="_on_room2_pressed"]
-[connection signal="pressed" from="ColorRect/VBoxContainer/HBoxContainer/Room3" to="." method="_on_room3_pressed"]
-[connection signal="pressed" from="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer/JumpButton" to="." method="_on_jump_button_pressed"]
-[connection signal="pressed" from="TopBarHBoxContainer/AbilitiesContainer/AbilitiesContainer/EatButton" to="." method="_on_eat_button_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/JumpButton" to="." method="_on_jump_button_pressed"]
+[connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/EatButton" to="." method="_on_eat_button_pressed"]
