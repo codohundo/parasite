@@ -13,6 +13,7 @@ var current_max_energy = 200
 var movement_cost = 5
 var infinite_energy: bool = false
 var level: int = 1
+var jump_cost = 15
 
 
 func _ready() -> void:
@@ -74,6 +75,7 @@ func move_cardinal(direction: String) -> Vector2:
 
 func level_up() -> void:
 	level += 1;
+	print("level: " + str(level))
 	player_level_up.emit(level)
 
 #need methods to play 

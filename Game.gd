@@ -105,7 +105,12 @@ func _process(delta: float) -> void:
 			#check level
 			start_eat()
 		if Input.is_action_just_pressed("jump") :
-			#check level
+			if player.level < 3 :
+				print("to low level")
+				return
+			if player.energy < player.jump_cost :
+				print("energy to low")
+				return 
 			#check energy
 			start_jump()
 	elif current_state == STATES.CASTING_RANGE :
@@ -170,9 +175,10 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 					player.jump_cardinal("down")
 			else:
 				player.jump_cardinal("up")
-			#pay jump cost
-			#spread creep
-			#fire tile events
+			
+			player.pay_energy(player.jump_cost) #refactor to encapsulate
+			handle_player_moved(current_global_tile_pos)
+			landing_tile.send_signal()
 	$HUD.set_ability_available(current_ability)
 
 func check_eat_range(pos1: Vector2, pos2: Vector2, padding: float = 0.5)->bool:
