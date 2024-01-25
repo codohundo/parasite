@@ -42,4 +42,3 @@ func _on_eat_button_pressed():
 	ability_selected.emit(ABILITIES.EAT)
 	var button = ability_buttons[ABILITIES.EAT]
 	button.disabled = true
-	

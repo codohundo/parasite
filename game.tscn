@@ -1923,6 +1923,7 @@ color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
 [node name="HUD" parent="." instance=ExtResource("9_k2sem")]
 
+[connection signal="player_energy_update" from="Player" to="HUD" method="set_energy"]
 [connection signal="body_entered" from="Rooms/Room1" to="Rooms/Room1" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room2" to="Rooms/Room2" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room3" to="Rooms/Room3" method="_on_body_entered"]

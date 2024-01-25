@@ -127,6 +127,8 @@ func _process(delta: float) -> void:
 			current_state = STATES.NORMAL
 			state_change.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
+			$HUD.set_ability_available(current_ability)
+		
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
 	match current_ability :
@@ -179,7 +181,6 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 			player.pay_energy(player.jump_cost) #refactor to encapsulate
 			handle_player_moved(current_global_tile_pos)
 			landing_tile.send_signal()
-	$HUD.set_ability_available(current_ability)
 
 func check_eat_range(pos1: Vector2, pos2: Vector2, padding: float = 0.5)->bool:
 	print("distance from: " + str(pos1) + " to: " + str(pos2))
@@ -192,6 +193,7 @@ func start_eat()->void:
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
 	current_ability = ABILITIES.EAT
+
 
 func start_jump()->void:
 	current_state = STATES.CASTING_RANGE
@@ -243,7 +245,6 @@ func handle_room_change(room_name: String) -> void:
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)
 	var energy_string: String = ""
-	$HUD.set_energy(player.energy)
 
 
 func handle_player_dead() -> void:
@@ -253,3 +254,5 @@ func handle_player_dead() -> void:
 func _on_hud_ability_selected(ability_selected: ABILITIES):
 	if ability_selected == ABILITIES.EAT:
 		start_eat()
+	elif ability_selected == ABILITIES.JUMP:
+		start_jump()

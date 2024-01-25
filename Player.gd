@@ -5,6 +5,7 @@ signal player_moved
 signal player_energy_zero
 signal player_energey_boosted #TODO tutorial popup here, we've boosted your energy for this room, nobody dies in the first room
 signal player_level_up
+signal player_energy_update
 
 @onready var anim = $AnimatedSprite2D
 
@@ -18,6 +19,7 @@ var jump_cost = 15
 
 func _ready() -> void:
 	anim.play("pulse")
+	player_energy_update.emit(energy)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,6 +35,7 @@ func eat(mob: Object) -> void :
 	energy += mob.consumption_energy
 	print("Swallow it's soul")
 	print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
+	player_energy_update.emit(energy)
 
 
 func pay_energy(cost: int) :
@@ -43,6 +46,8 @@ func pay_energy(cost: int) :
 		player_energey_boosted.emit()
 	if energy <= 0 :
 		player_energy_zero.emit()
+	player_energy_update.emit(energy)
+	
 
 func jump_cardinal(direction: String) -> Vector2:
 	match direction:
