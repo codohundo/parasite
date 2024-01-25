@@ -26,10 +26,8 @@ var current_ability: ABILITIES = ABILITIES.NONE
 
 #TODO for mvp
 #design 2nd creater
-#design jump
 #design attack
-#design 3rd room, movment cost goes up
-#
+
 #design upgrade system?
 #	possible upgrades, redusced cost, extra energy, new ablilities (jump, float, pull, push, extinguise)
 #refactor rooms to be dynamically loaded
@@ -58,6 +56,7 @@ func _ready() -> void:
 	print("cp: " + str(camera.position))
 	print("event: tutorial_basic_movement")
 	game_event.emit("tutorial_basic_movement")
+
 
 func process_input(direction: String, current_position: Vector2i) -> void :
 	var new_position: Vector2
@@ -128,7 +127,7 @@ func _process(delta: float) -> void:
 			state_change.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
 			$HUD.set_ability_available(current_ability)
-		
+
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
 	match current_ability :
@@ -179,13 +178,15 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				player.jump_cardinal("up")
 			
 			player.pay_energy(player.jump_cost) #refactor to encapsulate
-			handle_player_moved(current_global_tile_pos)
+			handle_player_moved_tile_pos(current_global_tile_pos)
 			landing_tile.send_signal()
+
 
 func check_eat_range(pos1: Vector2, pos2: Vector2, padding: float = 0.5)->bool:
 	print("distance from: " + str(pos1) + " to: " + str(pos2))
 	print(pos1.distance_to(pos2))
 	return int(pos1.distance_to(pos2)+padding) < 2
+
 
 func start_eat()->void:
 	current_state = STATES.CASTING_RANGE
@@ -201,7 +202,8 @@ func start_jump()->void:
 	state_change.emit(current_state)
 	Input.set_custom_mouse_cursor(target)
 	current_ability = ABILITIES.JUMP
-	
+
+
 #TODO when converting rooms to a proper class and loading from a file, change this from room name to 
 #the actual room object
 func handle_room_change(room_name: String) -> void:
@@ -222,7 +224,8 @@ func handle_room_change(room_name: String) -> void:
 				current_room.debug_print_room()
 				camera.position = Vector2i(208,88)
 				player.infinite_energy=false
-				player.energy = 50
+				player.set_energy(50)
+				game_event.emit("tutorial_energy") # let player know if they run out energy now, they die, bumping to 50
 				player.level_up() # gain eat
 			"room3":
 				current_room.show_fow()
@@ -242,9 +245,14 @@ func handle_room_change(room_name: String) -> void:
 				game_event.emit("tutorial_vibrant_floor")
 				print("handle_room_change room 4 finished")
 
+
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)
 	var energy_string: String = ""
+
+
+func handle_player_moved_tile_pos(position: Vector2)  -> void :
+	map.handle_player_moved_tile_pos(position)
 
 
 func handle_player_dead() -> void:

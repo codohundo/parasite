@@ -3,7 +3,7 @@ class_name Player
 
 signal player_moved 
 signal player_energy_zero
-signal player_energey_boosted #TODO tutorial popup here, we've boosted your energy for this room, nobody dies in the first room
+signal player_event #TODO tutorial popup here, we've boosted your energy for this room, nobody dies in the first room
 signal player_level_up
 signal player_energy_update
 
@@ -38,16 +38,22 @@ func eat(mob: Object) -> void :
 	player_energy_update.emit(energy)
 
 
-func pay_energy(cost: int) :
-	energy -= cost
-	print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
+func set_energy(new_energy: int) -> void :
+	energy = new_energy
+	player_energy_update.emit(energy)
+
+
+func pay_energy(cost: int) -> void:
 	if infinite_energy && energy < 10 :
-		energy = 50
-		player_energey_boosted.emit()
+		player_event.emit("tutorial_min_energy")
+	else :
+		energy -= cost
+		print("Energy: %s/%s" % [str(energy),str(current_max_energy)])
 	if energy <= 0 :
 		player_energy_zero.emit()
+		
 	player_energy_update.emit(energy)
-	
+
 
 func jump_cardinal(direction: String) -> Vector2:
 	match direction:
