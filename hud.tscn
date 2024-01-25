@@ -110,5 +110,49 @@ text = "20
 "
 horizontal_alignment = 1
 
+[node name="GameOver" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.431373, 0.431373, 0.431373, 0.603922)
+
+[node name="Quit" type="Button" parent="GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -15.5
+offset_right = 132.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 55
+text = "Exit"
+
+[node name="Label" type="Label" parent="GameOver"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -364.0
+offset_top = -310.5
+offset_right = 364.0
+offset_bottom = -115.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 70
+text = "You ran out of Energy
+Game Over"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/JumpButton" to="." method="_on_jump_button_pressed"]
 [connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/EatButton" to="." method="_on_eat_button_pressed"]
+[connection signal="pressed" from="GameOver/Quit" to="." method="handle_quit_button"]

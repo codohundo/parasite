@@ -14,6 +14,7 @@ extends Node
 
 signal state_change
 signal game_event
+signal game_over_event
 
 const Enums = preload("res://Enums.gd")
 const ABILITIES = Enums.ABILITIES
@@ -27,12 +28,9 @@ var current_ability: ABILITIES = ABILITIES.NONE
 #TODO for mvp
 #design 2nd creater
 #design attack
-
 #design upgrade system?
 #	possible upgrades, redusced cost, extra energy, new ablilities (jump, float, pull, push, extinguise)
 #refactor rooms to be dynamically loaded
-#handle game over
-#basic UI
 #basic tutorial
 #input mapping
 #controller support
@@ -63,7 +61,7 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 	current_room.debug_print_room()
 	if player.energy < movement_cost :
 		print("too weak")
-		game_event.emit("tutorial_game_over")
+		game_over_event.emit()
 		#TODO popup dialog game over man
 		#TODO reset, or just exit for now, might be easir until rooms are dynamically loaded
 		return
