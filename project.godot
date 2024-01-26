@@ -11,9 +11,11 @@ config_version=5
 [application]
 
 config/name="Parasite"
-run/main_scene="res://game.tscn"
+run/main_scene="res://Start.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/image="res://Assets/JamSmall.png"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=2000
 
 [autoload]
 

@@ -1,0 +1,75 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmyxkx65o0bfo"]
+
+[ext_resource type="Script" path="res://Start.gd" id="1_50pwu"]
+[ext_resource type="FontFile" uid="uid://cuuta5pukvhxv" path="res://Assets/Fonts/CourierPrime-Bold.ttf" id="1_f53sq"]
+[ext_resource type="FontFile" uid="uid://bvyxdwybik1ln" path="res://Assets/Fonts/CourierPrime-Italic.ttf" id="2_elpmd"]
+
+[node name="Start" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_50pwu")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.223529, 0.294118, 0.0235294, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control2" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 55)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_f53sq")
+theme_override_font_sizes/font_size = 100
+text = "Parasite World"
+horizontal_alignment = 1
+
+[node name="Control3" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_elpmd")
+theme_override_font_sizes/font_size = 45
+text = "by team Ill Gotten Jank"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_constants/separation = 14
+
+[node name="Start" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 55
+text = "Start"
+
+[node name="Quit" type="Button" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 10
+theme_override_font_sizes/font_size = 55
+text = "Quit"
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Quit" to="." method="_on_quit_pressed"]

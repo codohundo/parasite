@@ -25,6 +25,7 @@ func handle_player_moved(position: Vector2) -> void:
 	creep_tiles.append(tilePos)
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 
+
 func handle_player_moved_tile_pos(position: Vector2) -> void:
 	print("tp")
 	print(position)
