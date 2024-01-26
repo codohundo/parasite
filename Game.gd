@@ -3,7 +3,8 @@ extends Node
 @onready var hud = get_node("/root/hud")
 @onready var camera = $Camera
 @onready var map = $TileMap
-@onready var player: Player = $Player
+@onready var ev: GameEvents = get_node("/root/game_events")
+@onready var player = $Player
 @onready var room1 = $Rooms/Room1
 @onready var room2 = $Rooms/Room2
 @onready var room3 = $Rooms/Room3
@@ -51,6 +52,7 @@ func _ready() -> void:
 	room3.room_entered.connect(handle_room_change)
 	room4.room_entered.connect(handle_room_change)
 	player.player_energy_zero.connect(handle_player_dead)
+	game_event.connect(ev.handle_event)
 	Input.set_custom_mouse_cursor(pointer, Input.CURSOR_ARROW)
 	current_room = room1
 	player.infinite_energy = true
