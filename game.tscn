@@ -1,4 +1,4 @@
-[gd_scene load_steps=59 format=3 uid="uid://ce4gfw8nedaw5"]
+[gd_scene load_steps=60 format=3 uid="uid://ce4gfw8nedaw5"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_7yt4q"]
 [ext_resource type="AudioStream" uid="uid://dfun431d2d1xb" path="res://Assets/walk.wav" id="2_majqb"]

@@ -73,7 +73,8 @@ func handle_events(category, evt):
 			_on_hud_ability_selected(evt)
 		Enums.EVENT_CATEGORY.GAME:
 			if evt == "restart":
-				restart()
+				#restart()
+				pass
 		
 
 func process_input(direction: String, current_position: Vector2i) -> void :
@@ -103,10 +104,6 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 		print("new tile global pos: " + str(new_tile_pos))
 		handle_player_moved(new_position)
 
-
-func restart() -> void:
-	var start = preload("res://Start.tscn")
-	get_tree().reload_current_scene()
 
 func _process(delta: float) -> void:
 	#TODO this whole thing should be handled in an _input func  I think?
