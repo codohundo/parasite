@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://dc4jupuw1m6iv" path="res://Assets/wilhelm.wav" id="5_1exhp"]
 [ext_resource type="Script" path="res://Room1.gd" id="7_myllj"]
 [ext_resource type="Script" path="res://Room2.gd" id="8_18dhs"]
+[ext_resource type="PackedScene" uid="uid://c2okcv2ojj0sn" path="res://hud.tscn" id="9_k2sem"]
 [ext_resource type="Script" path="res://Room3.gd" id="9_opovf"]
 [ext_resource type="Script" path="res://Room4.gd" id="10_yj1ni"]
 [ext_resource type="Texture2D" uid="uid://bh63dk166upgv" path="res://Assets/walik_right.png" id="11_pwbef"]
@@ -2135,7 +2136,12 @@ offset_right = 752.0
 offset_bottom = 392.0
 color = Color(0.286275, 0.286275, 0.286275, 0.862745)
 
+[node name="HUD" parent="." instance=ExtResource("9_k2sem")]
+
+[connection signal="game_over_event" from="." to="HUD" method="game_over"]
+[connection signal="player_energy_update" from="Player" to="HUD" method="set_energy"]
 [connection signal="body_entered" from="Rooms/Room1" to="Rooms/Room1" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room2" to="Rooms/Room2" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room3" to="Rooms/Room3" method="_on_body_entered"]
 [connection signal="body_entered" from="Rooms/Room4" to="Rooms/Room4" method="_on_body_entered"]
+[connection signal="ability_selected" from="HUD" to="." method="_on_hud_ability_selected"]

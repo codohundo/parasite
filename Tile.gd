@@ -1,5 +1,9 @@
+extends Node
 class_name Tile
 signal tile_event
+
+@onready var ev: GameEvents = get_node("/root/game_events")
+const Enums = preload("res://Enums.gd")
 
 enum ROOM_TYPES {NORMAL, VIBRANT, TOXIC, SUPRESSIVE}
 enum WALL_TYPES {NONE, WALL, PIT, WATER, ACID}
@@ -67,6 +71,7 @@ func can_jump() -> bool:
 func send_signal() -> void:
 	if event != "" :
 		print("seinding signal: " + event)
+		ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, event)
 		tile_event.emit(event)
 	
 
