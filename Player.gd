@@ -7,7 +7,12 @@ signal player_event #TODO tutorial popup here, we've boosted your energy for thi
 signal player_level_up
 signal player_energy_update
 
-@onready var anim = $AnimatedSprite2D
+@onready var anim = $normal
+@onready var walk_right = $walk_right
+@onready var walk_left = $walk_left
+@onready var ding_sound = $ding_sound
+@onready var walk_up = $walk_up
+@onready var walk_down = $walk_down
 
 var energy = 100
 var current_max_energy = 200
@@ -70,13 +75,22 @@ func jump_cardinal(direction: String) -> Vector2:
 func move_cardinal(direction: String) -> Vector2:
 	match direction:
 		"up":
+			anim.hide()
 			move_local_y(-16)
+			animate_walking_up()
 		"down":
+			anim.hide()
 			move_local_y(16)
+			animate_walking_down()
 		"left":
+			anim.hide()
 			move_local_x(-16)
+			animate_walking_left()
 		"right":
+			anim.hide()
 			move_local_x(16)
+			animate_walking_right()
+			
 	return global_position
 	#caller has checked it move is legal
 	#play squish down animation
@@ -84,10 +98,48 @@ func move_cardinal(direction: String) -> Vector2:
 	#if needed add creep
 	#play squish up animation
 
+
+func animate_walking_right() -> void :
+	walk_right.show()
+	walk_right.animation_finished.connect(hide_walk)
+	walk_right.play()
+
+
+func animate_walking_left() -> void :
+	walk_left.show()
+	walk_left.animation_finished.connect(hide_walk)
+	walk_left.play()
+
+
+func animate_walking_up() -> void :
+	walk_up.show()
+	walk_up.animation_finished.connect(hide_walk)
+	walk_up.play()
+
+
+func animate_walking_down() -> void :
+	walk_down.show()
+	walk_down.animation_finished.connect(hide_walk)
+	walk_down.play()
+
+
+func hide_walk() -> void :
+	walk_right.hide()
+	walk_left.hide()
+	walk_up.hide()
+	walk_down.hide()
+	anim.show()
+
+
+func finish_walk() -> void :
+	anim.show()
+
+
 func level_up() -> void:
 	level += 1;
 	print("level: " + str(level))
 	player_level_up.emit(level)
+	ding_sound.play()
 
 #need methods to play 
 	#attack animation
