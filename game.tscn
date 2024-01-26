@@ -1,11 +1,15 @@
-[gd_scene load_steps=27 format=3 uid="uid://ce4gfw8nedaw5"]
+[gd_scene load_steps=31 format=3 uid="uid://ce4gfw8nedaw5"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_7yt4q"]
+[ext_resource type="AudioStream" uid="uid://dfun431d2d1xb" path="res://Assets/walk.wav" id="2_majqb"]
 [ext_resource type="Texture2D" uid="uid://bq3cxnnbj3ahf" path="res://Assets/TileSet.png" id="2_urr8y"]
+[ext_resource type="AudioStream" uid="uid://b2ky46ghioqyk" path="res://Assets/eat.wav" id="3_bbfjd"]
 [ext_resource type="Texture2D" uid="uid://bilgl3r6com60" path="res://Assets/Hero.png" id="3_nyea1"]
 [ext_resource type="Texture2D" uid="uid://cbovf0nt38v38" path="res://Assets/Mobs.png" id="4_6faw5"]
+[ext_resource type="AudioStream" uid="uid://deaujoxkw4m6q" path="res://Assets/jump.wav" id="4_ij6fc"]
 [ext_resource type="Script" path="res://TileMap.gd" id="4_j57s7"]
 [ext_resource type="Script" path="res://Player.gd" id="4_s6hjg"]
+[ext_resource type="AudioStream" uid="uid://dc4jupuw1m6iv" path="res://Assets/wilhelm.wav" id="5_1exhp"]
 [ext_resource type="Script" path="res://Room1.gd" id="7_myllj"]
 [ext_resource type="Script" path="res://Room2.gd" id="8_18dhs"]
 [ext_resource type="PackedScene" uid="uid://c2okcv2ojj0sn" path="res://hud.tscn" id="9_k2sem"]
@@ -1774,6 +1778,19 @@ size = Vector2(112, 112)
 
 [node name="Game" type="Node"]
 script = ExtResource("1_7yt4q")
+
+[node name="walk_sound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(8, 40)
+stream = ExtResource("2_majqb")
+
+[node name="eat_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_bbfjd")
+
+[node name="jump_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_ij6fc")
+
+[node name="wilhelm_sound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_1exhp")
 
 [node name="Camera" type="Camera2D" parent="."]
 position = Vector2(56, 88)

@@ -12,6 +12,11 @@ extends Node
 @onready var pointer = load("res://Assets/pointer.png")
 @onready var target = load("res://Assets/target.png")
 
+@onready var walk_sound = $walk_sound
+@onready var eat_sound = $eat_sound
+@onready var jump_sound = $jump_sound
+@onready var die_sound = $wilhelm_sound
+
 signal state_change
 signal game_event
 signal game_over_event
@@ -24,6 +29,8 @@ var movement_cost = 5 #move to tile?
 var current_room: Node2D
 var current_state: STATES = STATES.NORMAL
 var current_ability: ABILITIES = ABILITIES.NONE
+
+var timer = null 
 
 #TODO for mvp
 #design 2nd creater
@@ -62,6 +69,7 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 	if player.energy < movement_cost :
 		print("too weak")
 		game_over_event.emit()
+		die_sound.play()
 		#TODO popup dialog game over man
 		#TODO reset, or just exit for now, might be easir until rooms are dynamically loaded
 		return
@@ -140,6 +148,7 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				player.eat(mob)
 				game_event.emit("tutorial_eating_energy")
 				current_room.kill_mob_at(current_global_tile_pos)
+				eat_sound.play()
 				map.remove_spite(current_global_tile_pos)
 		ABILITIES.JUMP :
 			print("find square to land in")
@@ -165,6 +174,8 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 			if !skipped_tile.can_jump() :
 				print("can't jump")
 				return
+			jump_sound.play()
+			OS.delay_msec(400)
 			if(abs(current_global_tile_pos.x -player_pos_global_tile.x) > 0 ):
 				if(current_global_tile_pos.x > player_pos_global_tile.x):
 					player.jump_cardinal("right")
@@ -246,6 +257,7 @@ func handle_room_change(room_name: String) -> void:
 
 func handle_player_moved(position: Vector2)  -> void :
 	map.handle_player_moved(position)
+	walk_sound.play()
 	var energy_string: String = ""
 
 
