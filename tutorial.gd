@@ -4,6 +4,8 @@ extends CanvasLayer
 @onready var message: Label = get_node("ColorRect/VBox/HBox/Message")
 @onready var timer: Timer = get_node("MessageTimer")
 
+const Enums = preload("res://Enums.gd")
+
 # tutorial events. first value is the handler, second is a marker
 # indicating if we've seen this one before
 var tutorial_events = {
@@ -28,7 +30,9 @@ var energy_messages = [
 func _ready():
 	ev.something_happened.connect(game_changed)
 
-func game_changed(evt):
+func game_changed(category: Enums.EVENT_CATEGORY, evt):
+	if category != Enums.EVENT_CATEGORY.TUTORIAL:
+		return
 	if evt in tutorial_events and tutorial_events[evt][1]:
 		tutorial_events[evt][1] = false
 		tutorial_events[evt][0].call()

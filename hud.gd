@@ -52,6 +52,7 @@ func _ready() -> void:
 	ability_buttons[ABILITIES.JUMP].disabled = true
 	ability_buttons[ABILITIES.EAT].disabled = true
 	game_events.something_happened.connect(handle_game_events)
+	ability_selected.connect(func(a): game_events.handle_event(Enums.EVENT_CATEGORY.ABILITY,a))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -80,18 +81,23 @@ func handle_quit_button() -> void:
 	print("QUIT")
 	get_tree().quit()
 
-
-func handle_game_events(evt) -> void:
-	if evt == "game_over":
-		game_over()
-	if evt == "score_new_creep":
-		player_score += 2
-	if evt == "score_new_creep_jump":
-		player_score += 4
-	if evt == "score_eat":
-		player_score += 8
-
-
 func _on_restart_pressed() -> void:
 	# event buss back to game restart
 	pass # Replace with function body.
+
+func handle_game_events(category, evt) -> void:
+	print("Event category: " + str(category))
+	match category:
+		Enums.EVENT_CATEGORY.GAME:
+			if evt == "game_over":
+				game_over()
+		Enums.EVENT_CATEGORY.ENERGY:
+			set_energy(evt)
+		Enums.EVENT_CATEGORY.SCORE:
+			match evt:
+				"score_new_creep":
+					player_score += 2
+				"score_new_creep_jump":
+					player_score += 4
+				"score_eat":
+					player_score += 8

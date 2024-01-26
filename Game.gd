@@ -50,7 +50,7 @@ func _ready() -> void:
 	room3.room_entered.connect(handle_room_change)
 	room4.room_entered.connect(handle_room_change)
 	player.player_energy_zero.connect(handle_player_dead)
-	game_event.connect(ev.handle_event)
+	#game_event.connect(ev.handle_event)
 	Input.set_custom_mouse_cursor(pointer, Input.CURSOR_ARROW)
 	current_room = room1
 	player.infinite_energy = true
@@ -60,10 +60,18 @@ func _ready() -> void:
 	movement_cost = current_room.movement_cost
 	print("cp: " + str(camera.position))
 	print("event: tutorial_basic_movement")
-	game_event.emit("tutorial_basic_movement")
-	game_over_event.connect(ev.handle_event.bind("game_over"))
+	#game_event.emit("tutorial_basic_movement")
+	ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, "tutorial_basic_movement")
+	game_over_event.connect(ev.handle_event.bind(Enums.EVENT_CATEGORY.GAME, "game_over"))
+	player.player_energy_update.connect(func(e): ev.handle_event(Enums.EVENT_CATEGORY.ENERGY, e))
+	ev.something_happened.connect(handle_events)
 	player.player_level_up.connect(handle_player_level)
 
+func handle_events(category, evt):
+	match category:
+		Enums.EVENT_CATEGORY.ABILITY:
+			_on_hud_ability_selected(evt)
+		
 
 func process_input(direction: String, current_position: Vector2i) -> void :
 	var new_position: Vector2
@@ -151,7 +159,9 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				print( "eating: " + mob.mob_name)
 				player.eat(mob)
 				game_event.emit("tutorial_eating_energy")
-				game_event.emit("score_eat")
+				ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, "tutorial_eating_energy")
+				#game_event.emit("score_eat")
+				ev.something_happened.emit(Enums.EVENT_CATEGORY.SCORE, "score_eat")
 				current_room.kill_mob_at(current_global_tile_pos)
 				eat_sound.play()
 				map.remove_spite(current_global_tile_pos)
@@ -242,6 +252,7 @@ func handle_room_change(room_name: String) -> void:
 				camera.position = Vector2i(208,88)
 				player.infinite_energy=false
 				player.set_energy(50)
+				ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, "tutorial_energy")
 				game_event.emit("tutorial_energy") # let player know if they run out energy now, they die, bumping to 50
 				player.level_up() # gain eat
 				hud.set_ability_available(ABILITIES.EAT)
@@ -251,6 +262,7 @@ func handle_room_change(room_name: String) -> void:
 				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				camera.position = Vector2i(168,200)
+				ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, "tutorial_toxic_floor")
 				game_event.emit("tutorial_toxic_floor")
 			"room4":
 				player.level_up() # gain jumnp
@@ -260,6 +272,7 @@ func handle_room_change(room_name: String) -> void:
 				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				camera.position = Vector2i(320,250)
+				ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, "tutorial_vibrant_floor")
 				game_event.emit("tutorial_vibrant_floor")
 				hud.set_ability_available(ABILITIES.EAT)
 				print("handle_room_change room 4 finished")

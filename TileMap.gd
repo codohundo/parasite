@@ -8,6 +8,8 @@ var creep_terrain = 1
 
 var creep_tiles = []
 
+const Enums = preload("res://Enums.gd")
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var vp = get_viewport()
@@ -25,7 +27,7 @@ func handle_player_moved(position: Vector2) -> void:
 	creep_tiles.append(tilePos)
 	var creep_coords = get_cell_atlas_coords(object_layer, tilePos)
 	if (creep_coords == Vector2i(-1, -1)):
-		game_events.something_happened.emit("score_new_creep")
+		game_events.something_happened.emit(Enums.EVENT_CATEGORY.SCORE, "score_new_creep")
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 
 
@@ -34,7 +36,7 @@ func handle_player_moved_tile_pos(position: Vector2) -> void:
 	print(position)
 	var creep_coords = get_cell_atlas_coords(object_layer, position)
 	if (creep_coords == Vector2i(-1, -1)):
-		game_events.something_happened.emit("score_new_creep_jump")
+		game_events.something_happened.emit(Enums.EVENT_CATEGORY.SCORE, "score_new_creep_jump")
 	creep_tiles.append(position)
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 

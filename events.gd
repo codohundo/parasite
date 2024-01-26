@@ -1,14 +1,9 @@
 extends Node
 class_name GameEvents
-#@onready var ev = get_node("/root/tutorial")
 
+const Enums = preload("res://Enums.gd")
 
+signal something_happened(payload, category: Enums.EVENT_CATEGORY)
 
-signal roomChanged(room: String)
-signal playerMoved(position: Vector2)
-signal something_happened(tag: String)
-
-
-func handle_event(event):
-	#await ev.ready
-	something_happened.emit(event)
+func handle_event(category: Enums.EVENT_CATEGORY , payload):
+	something_happened.emit(category, payload)
