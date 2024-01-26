@@ -32,9 +32,12 @@ layout_mode = 2
 alignment = 1
 
 [node name="Message" type="Label" parent="ColorRect/VBox/HBox"]
+custom_minimum_size = Vector2(300, 23)
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Sample Text
 "
+autowrap_mode = 3
 
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 3.0

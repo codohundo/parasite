@@ -46,6 +46,7 @@ var timer = null
 #SOUND
 
 func _ready() -> void:
+	randomize()  # init random seed
 	hud.roomChange.connect(handle_room_change)
 	room1.room_entered.connect(handle_room_change)
 	room2.room_entered.connect(handle_room_change)
