@@ -39,11 +39,8 @@ var timer = null
 #design upgrade system?
 #	possible upgrades, redusced cost, extra energy, new ablilities (jump, float, pull, push, extinguise)
 #refactor rooms to be dynamically loaded
-#basic tutorial
 #input mapping
 #controller support
-#limit ability range
-#SOUND
 
 func _ready() -> void:
 	randomize()  # init random seed
@@ -75,8 +72,6 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 		print("too weak")
 		game_over_event.emit()
 		die_sound.play()
-		#TODO popup dialog game over man
-		#TODO reset, or just exit for now, might be easir until rooms are dynamically loaded
 		return
 	print("going " + direction)
 	if current_room.can_walk(current_position, direction):
@@ -97,6 +92,10 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 		print("new tile global pos: " + str(new_tile_pos))
 		handle_player_moved(new_position)
 
+
+func restart() -> void:
+	var start = preload("res://Start.tscn")
+	get_tree().change_scene_to_packed(start)
 
 func _process(delta: float) -> void:
 	#TODO this whole thing should be handled in an _input func  I think?
