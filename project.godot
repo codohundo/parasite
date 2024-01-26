@@ -18,12 +18,18 @@ config/icon="res://icon.svg"
 [autoload]
 
 hud="*res://hud.tscn"
+game_events="*res://events.tscn"
+tutorial="*res://tutorial.tscn"
 
 [display]
 
 window/size/viewport_width=1000
 window/size/viewport_height=1000
 window/size/resizable=false
+
+[dotnet]
+
+project/assembly_name="Parasite"
 
 [input]
 
