@@ -13,7 +13,6 @@ signal player_energy_update
 @onready var ding_sound = $ding_sound
 @onready var walk_up = $walk_up
 @onready var walk_down = $walk_down
-
 var energy = 100
 var current_max_energy = 200
 var movement_cost = 5
