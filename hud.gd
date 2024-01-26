@@ -8,6 +8,8 @@ const ABILITIES = Enums.ABILITIES
 
 var ability_buttons = {}
 
+var player_level: int = 1
+
 func set_ability_available(ability: ABILITIES) -> void:
 	if ability in ability_buttons:
 		var button = ability_buttons[ability]
@@ -18,6 +20,13 @@ func set_ability_unavailable(ability: ABILITIES) -> void:
 	if ability in ability_buttons:
 		var button = ability_buttons[ability]
 		button.disabled = true
+
+func set_player_level(level: int) -> void :
+	player_level = level
+	if player_level >= 2 :
+		ability_buttons[ABILITIES.EAT].disabled = false
+	if player_level >= 3 :
+		ability_buttons[ABILITIES.JUMP].disabled = false
 
 
 func set_energy(energy: int) -> void:
@@ -32,6 +41,8 @@ func set_score(score: int) -> void:
 func _ready() -> void:
 	ability_buttons[ABILITIES.JUMP] = $ColorRect/VBoxContainer/AbilitiesContainer/JumpButton
 	ability_buttons[ABILITIES.EAT] = $ColorRect/VBoxContainer/AbilitiesContainer/EatButton
+	ability_buttons[ABILITIES.JUMP].disabled = true
+	ability_buttons[ABILITIES.EAT].disabled = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -40,6 +51,7 @@ func _process(delta: float) -> void:
 
 
 func _on_jump_button_pressed():
+	
 	ability_selected.emit(ABILITIES.JUMP)
 	var button = ability_buttons[ABILITIES.JUMP]
 	button.disabled = true
