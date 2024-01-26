@@ -71,7 +71,7 @@ func can_jump() -> bool:
 func send_signal() -> void:
 	if event != "" :
 		print("seinding signal: " + event)
-		ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, event)
+#		ev.something_happened.emit(Enums.EVENT_CATEGORY.TUTORIAL, event)
 		tile_event.emit(event)
 	
 
