@@ -7,7 +7,6 @@ const Enums = preload("res://Enums.gd")
 const ABILITIES = Enums.ABILITIES
 
 var ability_buttons = {}
-
 var player_level: int = 1
 
 var player_score: int = 0:
@@ -16,6 +15,7 @@ var player_score: int = 0:
 		set_score(player_score)
 	get:
 		return player_score
+
 
 func set_ability_available(ability: ABILITIES) -> void:
 	if ability in ability_buttons:
@@ -27,6 +27,7 @@ func set_ability_unavailable(ability: ABILITIES) -> void:
 	if ability in ability_buttons:
 		var button = ability_buttons[ability]
 		button.disabled = true
+
 
 func set_player_level(level: int) -> void :
 	player_level = level
@@ -42,6 +43,7 @@ func set_energy(energy: int) -> void:
 
 func set_score(score: int) -> void:
 	$TopBarHBoxContainer/ScoreVBox2/Score.text = str(score)
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -78,6 +80,7 @@ func handle_quit_button() -> void:
 	print("QUIT")
 	get_tree().quit()
 
+
 func handle_game_events(evt) -> void:
 	if evt == "game_over":
 		game_over()
@@ -87,4 +90,8 @@ func handle_game_events(evt) -> void:
 		player_score += 4
 	if evt == "score_eat":
 		player_score += 8
-	
+
+
+func _on_restart_pressed() -> void:
+	# event buss back to game restart
+	pass # Replace with function body.

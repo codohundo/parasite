@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2okcv2ojj0sn"]
+[gd_scene load_steps=5 format=3 uid="uid://c2okcv2ojj0sn"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_bjper"]
 [ext_resource type="Texture2D" uid="uid://bnngt34hteq2a" path="res://Assets/under.png" id="2_2ap1d"]
 [ext_resource type="Texture2D" uid="uid://djaakyn12jehd" path="res://Assets/progress.png" id="3_olceo"]
+[ext_resource type="FontFile" uid="uid://cuuta5pukvhxv" path="res://Assets/Fonts/CourierPrime-Bold.ttf" id="4_w55px"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bjper")
@@ -111,7 +112,6 @@ text = "20
 horizontal_alignment = 1
 
 [node name="GameOver" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -127,11 +127,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -132.0
-offset_top = -15.5
+offset_top = 12.0
 offset_right = 132.0
-offset_bottom = 15.5
+offset_bottom = 96.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_w55px")
 theme_override_font_sizes/font_size = 55
 text = "Exit"
 
@@ -148,11 +149,23 @@ offset_right = 364.0
 offset_bottom = -115.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_w55px")
 theme_override_font_sizes/font_size = 70
 text = "You ran out of Energy
 Game Over"
 horizontal_alignment = 1
 
+[node name="Restart" type="Button" parent="GameOver"]
+layout_mode = 0
+offset_left = 368.0
+offset_top = 416.0
+offset_right = 632.0
+offset_bottom = 500.0
+theme_override_fonts/font = ExtResource("4_w55px")
+theme_override_font_sizes/font_size = 55
+text = "Restart"
+
 [connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/JumpButton" to="." method="_on_jump_button_pressed"]
 [connection signal="pressed" from="ColorRect/VBoxContainer/AbilitiesContainer/EatButton" to="." method="_on_eat_button_pressed"]
 [connection signal="pressed" from="GameOver/Quit" to="." method="handle_quit_button"]
+[connection signal="pressed" from="GameOver/Restart" to="." method="_on_restart_pressed"]
