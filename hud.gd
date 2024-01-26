@@ -83,7 +83,7 @@ func handle_quit_button() -> void:
 
 func _on_restart_pressed() -> void:
 	# event buss back to game restart
-	pass # Replace with function body.
+	game_events.something_happened.emit(Enums.EVENT_CATEGORY.GAME, "restart")
 
 func handle_game_events(category, evt) -> void:
 	print("Event category: " + str(category))

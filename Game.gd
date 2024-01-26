@@ -71,6 +71,9 @@ func handle_events(category, evt):
 	match category:
 		Enums.EVENT_CATEGORY.ABILITY:
 			_on_hud_ability_selected(evt)
+		Enums.EVENT_CATEGORY.GAME:
+			if evt == "restart":
+				restart()
 		
 
 func process_input(direction: String, current_position: Vector2i) -> void :
