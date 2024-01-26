@@ -106,7 +106,7 @@ func process_input(direction: String, current_position: Vector2i) -> void :
 
 func restart() -> void:
 	var start = preload("res://Start.tscn")
-	get_tree().change_scene_to_packed(start)
+	get_tree().reload_current_scene()
 
 func _process(delta: float) -> void:
 	#TODO this whole thing should be handled in an _input func  I think?

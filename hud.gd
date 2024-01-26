@@ -88,9 +88,15 @@ func _on_restart_pressed() -> void:
 func handle_game_events(category, evt) -> void:
 	print("Event category: " + str(category))
 	match category:
+		
 		Enums.EVENT_CATEGORY.GAME:
 			if evt == "game_over":
 				game_over()
+			if evt == "restart":
+				$GameOver.visible = false
+				player_score = 0
+				player_level = 1
+			
 		Enums.EVENT_CATEGORY.ENERGY:
 			set_energy(evt)
 		Enums.EVENT_CATEGORY.SCORE:
