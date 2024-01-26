@@ -18,6 +18,7 @@ var tutorial_events = {
 	"tutorial_hole": [set_generic_message.bind("Pits block your movement, we might learn a way to get past these in the future"), true],
 	"tutorial_water": [set_generic_message.bind("This looks like a nice lake, too bad we can't swim... yet"), true],
 	"tutorial_better_eat": [set_generic_message.bind("Use the eat ability (click on eat or hit '1') and click on the blue wisp"), true],
+	"tutorial_spread" : [set_generic_message.bind("As you move around, you spread the creep, but that's a good thing"), true],
 	"player_level_up": [set_generic_message.bind("Unlocked the ability to jump over one square, click on jump (or press 2) and then select an open tile exactly 2 squares away in a cardinal directio"), true]
 }
 
