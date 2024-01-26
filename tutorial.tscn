@@ -41,6 +41,7 @@ autowrap_mode = 3
 
 [node name="MessageTimer" type="Timer" parent="."]
 wait_time = 3.0
+one_shot = true
 
 [connection signal="resized" from="ColorRect/VBox" to="." method="_on_v_box_resized"]
 [connection signal="timeout" from="MessageTimer" to="." method="on_message_timer_end"]

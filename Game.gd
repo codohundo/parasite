@@ -64,6 +64,7 @@ func _ready() -> void:
 	print("cp: " + str(camera.position))
 	print("event: tutorial_basic_movement")
 	game_event.emit("tutorial_basic_movement")
+	game_over_event.connect(ev.handle_event.bind("game_over"))
 	player.player_level_up.connect(handle_player_level)
 
 
@@ -136,7 +137,7 @@ func _process(delta: float) -> void:
 			current_state = STATES.NORMAL
 			state_change.emit(STATES.NORMAL)
 			Input.set_custom_mouse_cursor(pointer)
-			$HUD.set_ability_available(current_ability)
+			hud.set_ability_available(current_ability)
 
 
 func target_selected(current_global_tile_pos: Vector2i ) -> void: 
@@ -230,8 +231,8 @@ func handle_room_change(room_name: String) -> void:
 				movement_cost = current_room.movement_cost
 				current_room.hide_fow()
 				camera.position = Vector2i(56,88)
-				$HUD.set_ability_unavailable(ABILITIES.JUMP)
-				$HUD.set_ability_unavailable(ABILITIES.EAT)
+				hud.set_ability_unavailable(ABILITIES.JUMP)
+				hud.set_ability_unavailable(ABILITIES.EAT)
 		
 			"room2":
 				current_room.show_fow()
@@ -244,7 +245,7 @@ func handle_room_change(room_name: String) -> void:
 				player.set_energy(50)
 				game_event.emit("tutorial_energy") # let player know if they run out energy now, they die, bumping to 50
 				player.level_up() # gain eat
-				$HUD.set_ability_available(ABILITIES.EAT)
+				hud.set_ability_available(ABILITIES.EAT)
 			"room3":
 				current_room.show_fow()
 				current_room = room3
@@ -261,7 +262,7 @@ func handle_room_change(room_name: String) -> void:
 				current_room.hide_fow()
 				camera.position = Vector2i(320,250)
 				game_event.emit("tutorial_vibrant_floor")
-				$HUD.set_ability_available(ABILITIES.EAT)
+				hud.set_ability_available(ABILITIES.EAT)
 				print("handle_room_change room 4 finished")
 
 

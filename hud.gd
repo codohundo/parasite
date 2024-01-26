@@ -79,6 +79,8 @@ func handle_quit_button() -> void:
 	get_tree().quit()
 
 func handle_game_events(evt) -> void:
+	if evt == "game_over":
+		game_over()
 	if evt == "score_new_creep":
 		player_score += 2
 	if evt == "score_new_creep_jump":
