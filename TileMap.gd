@@ -23,12 +23,18 @@ func handle_player_moved(position: Vector2) -> void:
 	print("tp")
 	print(tilePos)
 	creep_tiles.append(tilePos)
+	var creep_coords = get_cell_atlas_coords(object_layer, tilePos)
+	if (creep_coords == Vector2i(-1, -1)):
+		game_events.something_happened.emit("score_new_creep")
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 
 
 func handle_player_moved_tile_pos(position: Vector2) -> void:
 	print("tp")
 	print(position)
+	var creep_coords = get_cell_atlas_coords(object_layer, position)
+	if (creep_coords == Vector2i(-1, -1)):
+		game_events.something_happened.emit("score_new_creep_jump")
 	creep_tiles.append(position)
 	set_cells_terrain_connect(object_layer, creep_tiles, terrain_set, creep_terrain )
 
