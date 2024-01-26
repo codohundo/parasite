@@ -151,6 +151,7 @@ func target_selected(current_global_tile_pos: Vector2i ) -> void:
 				print( "eating: " + mob.mob_name)
 				player.eat(mob)
 				game_event.emit("tutorial_eating_energy")
+				game_event.emit("score_eat")
 				current_room.kill_mob_at(current_global_tile_pos)
 				eat_sound.play()
 				map.remove_spite(current_global_tile_pos)

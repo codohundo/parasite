@@ -10,6 +10,13 @@ var ability_buttons = {}
 
 var player_level: int = 1
 
+var player_score: int = 0:
+	set(new_score):
+		player_score = new_score
+		set_score(player_score)
+	get:
+		return player_score
+
 func set_ability_available(ability: ABILITIES) -> void:
 	if ability in ability_buttons:
 		var button = ability_buttons[ability]
@@ -34,8 +41,7 @@ func set_energy(energy: int) -> void:
 
 
 func set_score(score: int) -> void:
-	$TopBarHBoxContainer/ScoreVBox2/Score.value = score
-
+	$TopBarHBoxContainer/ScoreVBox2/Score.text = str(score)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -43,6 +49,7 @@ func _ready() -> void:
 	ability_buttons[ABILITIES.EAT] = $ColorRect/VBoxContainer/AbilitiesContainer/EatButton
 	ability_buttons[ABILITIES.JUMP].disabled = true
 	ability_buttons[ABILITIES.EAT].disabled = true
+	game_events.something_happened.connect(handle_game_events)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -70,3 +77,12 @@ func game_over() -> void :
 func handle_quit_button() -> void:
 	print("QUIT")
 	get_tree().quit()
+
+func handle_game_events(evt) -> void:
+	if evt == "score_new_creep":
+		player_score += 2
+	if evt == "score_new_creep_jump":
+		player_score += 4
+	if evt == "score_eat":
+		player_score += 8
+	

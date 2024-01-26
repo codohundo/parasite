@@ -29,7 +29,6 @@ func _ready():
 	ev.something_happened.connect(game_changed)
 
 func game_changed(evt):
-	print("tutorial: got " + evt)
 	if evt in tutorial_events and tutorial_events[evt][1]:
 		tutorial_events[evt][1] = false
 		tutorial_events[evt][0].call()
